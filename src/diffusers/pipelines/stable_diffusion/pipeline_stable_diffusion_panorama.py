@@ -610,7 +610,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
 
         # 6. Define panorama grid and initialize views for synthesis.
         views = self.get_views(height, width)
-        views_segment = self.get_views(height, width, window_size=8
+        views_segment = self.get_views(height, width, window_size=8)
         views_scheduler_status = [copy.deepcopy(self.scheduler.__dict__)] * len(views)
         count = torch.zeros_like(latents)
         value = torch.zeros_like(latents)

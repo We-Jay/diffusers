@@ -669,7 +669,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
                     views_scheduler_status[j] = copy.deepcopy(self.scheduler.__dict__)
 
 #                     value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
-                    value[:, :, h_start:h_end, w_start:w_end] = 0.0
+                    value[:, :, h_start:h_end, w_start:w_end] *= 0.0
                     value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
                     count[:, :, h_start:h_end, w_start:w_end] += 1
 

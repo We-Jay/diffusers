@@ -449,7 +449,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
         latents = latents * self.scheduler.init_noise_sigma
         return latents
 
-    def get_views(self, panorama_height, panorama_width, window_size=64, stride=32):
+    def get_views(self, panorama_height, panorama_width, window_size=64, stride=64):
         # Here, we define the mappings F_i (see Eq. 7 in the MultiDiffusion paper https://arxiv.org/abs/2302.08113)
         panorama_height /= 8
         panorama_width /= 8
@@ -669,7 +669,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
                     views_scheduler_status[j] = copy.deepcopy(self.scheduler.__dict__)
 
 #                     value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
-                    value[:, :, h_start:h_end, w_start:w_end] -= value[:, :, h_start:h_end, w_start:w_end]
+#                     value[:, :, h_start:h_end, w_start:w_end] -= value[:, :, h_start:h_end, w_start:w_end]
                     value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
                     count[:, :, h_start:h_end, w_start:w_end] += 1
 

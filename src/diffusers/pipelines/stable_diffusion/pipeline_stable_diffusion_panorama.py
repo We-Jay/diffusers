@@ -449,7 +449,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
         latents = latents * self.scheduler.init_noise_sigma
         return latents
 
-    def get_views(self, panorama_height, panorama_width, window_size=64, stride=32):
+    def get_views(self, panorama_height, panorama_width, window_size=64, stride=8):
         # Here, we define the mappings F_i (see Eq. 7 in the MultiDiffusion paper https://arxiv.org/abs/2302.08113)
         panorama_height /= 8
         panorama_width /= 8
@@ -672,7 +672,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
                     count[:, :, h_start:h_end, w_start:w_end] += 1
 
                 for j, (h_start, h_end, w_start, w_end) in enumerate(views_segment):
-                    print(f'segment no = {j}, and count is = {count[0][0][h_start+1][w_start+1]}')
+                    print(f'iteration = {i} segment no = {j}, and count is = {count[0][0][h_start+1][w_start+1]}')
 
                 # take the MultiDiffusion step. Eq. 5 in MultiDiffusion paper: https://arxiv.org/abs/2302.08113
                 latents = torch.where(count > 0, value / count, value)

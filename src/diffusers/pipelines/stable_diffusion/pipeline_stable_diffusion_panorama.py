@@ -610,9 +610,11 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
 
         # 6. Define panorama grid and initialize views for synthesis.
         views = self.get_views(height, width)
+        views_segment = self.get_views(height, width, window_size=8
         views_scheduler_status = [copy.deepcopy(self.scheduler.__dict__)] * len(views)
         count = torch.zeros_like(latents)
         value = torch.zeros_like(latents)
+        counter = torch.zeros((32), dtype=int)
 
         # 7. Prepare extra step kwargs. TODO: Logic should ideally just be moved out of the pipeline
         extra_step_kwargs = self.prepare_extra_step_kwargs(generator, eta)
@@ -625,6 +627,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
             for i, t in enumerate(timesteps):
                 count.zero_()
                 value.zero_()
+
 
                 # generate views
                 # Here, we iterate through different spatial crops of the latents and denoise them. These
@@ -668,8 +671,13 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
                     value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
                     count[:, :, h_start:h_end, w_start:w_end] += 1
 
+                for j, (h_start, h_end, w_start, w_end) in enumerate(views_segment):
+                    print(f'segment no = {j}, and count is = {count[0][0][h_start+1][w_start+1]}')
+
                 # take the MultiDiffusion step. Eq. 5 in MultiDiffusion paper: https://arxiv.org/abs/2302.08113
                 latents = torch.where(count > 0, value / count, value)
+
+
 
                 # call the callback, if provided
                 if i == len(timesteps) - 1 or ((i + 1) > num_warmup_steps and (i + 1) % self.scheduler.order == 0):

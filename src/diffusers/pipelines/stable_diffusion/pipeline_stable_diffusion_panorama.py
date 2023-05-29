@@ -678,7 +678,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
 
                 # take the MultiDiffusion step. Eq. 5 in MultiDiffusion paper: https://arxiv.org/abs/2302.08113
 #                 
-                if i == 49:    
+                if i < 20:    
                     latents = torch.where(count > 0, value / count, value)
                 else:
                     latents = torch.where(count > 0, value, value)

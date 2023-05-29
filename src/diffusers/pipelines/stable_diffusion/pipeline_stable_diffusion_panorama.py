@@ -677,8 +677,11 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
                     print(f'iteration = {i} segment no = {j}, and count is = {count[0][0][h_start+1][w_start+1]}')
 
                 # take the MultiDiffusion step. Eq. 5 in MultiDiffusion paper: https://arxiv.org/abs/2302.08113
-#                 latents = torch.where(count > 0, value / count, value)
-                latents = torch.where(count > 0, value, value)
+#                 
+                if i == 49:    
+                    latents = torch.where(count > 0, value / count, value)
+                else:
+                    latents = torch.where(count > 0, value, value)
 
 
 

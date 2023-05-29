@@ -667,23 +667,24 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
 
                     # save views scheduler status after sample
                     views_scheduler_status[j] = copy.deepcopy(self.scheduler.__dict__)
-
-                    if i > 45 :  
-                        value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
-                    else:
-                        value[:, :, h_start:h_end, w_start:w_end] -= value[:, :, h_start:h_end, w_start:w_end]
-                        value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
+                    value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
+#                     if i > 45 :  
+#                         value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
+#                     else:
+#                         value[:, :, h_start:h_end, w_start:w_end] -= value[:, :, h_start:h_end, w_start:w_end]
+#                         value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
                     count[:, :, h_start:h_end, w_start:w_end] += 1
 
                 for j, (h_start, h_end, w_start, w_end) in enumerate(views_segment):
                     print(f'iteration = {i} segment no = {j}, and count is = {count[0][0][h_start+1][w_start+1]}')
-
+                
+                latents = torch.where(count > 0, value / count, value)
                 # take the MultiDiffusion step. Eq. 5 in MultiDiffusion paper: https://arxiv.org/abs/2302.08113
 #                 
-                if i > 45:    
-                    latents = torch.where(count > 0, value / count, value)
-                else:
-                    latents = torch.where(count > 0, value, value)
+#                 if i > 45:    
+#                     latents = torch.where(count > 0, value / count, value)
+#                 else:
+#                     latents = torch.where(count > 0, value, value)
 
 
 

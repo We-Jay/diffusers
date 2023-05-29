@@ -668,7 +668,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
                     # save views scheduler status after sample
                     views_scheduler_status[j] = copy.deepcopy(self.scheduler.__dict__)
 
-                    if i < 10 :  
+                    if i < 35 :  
                         value[:, :, h_start:h_end, w_start:w_end] += latents_view_denoised
                     else:
                         value[:, :, h_start:h_end, w_start:w_end] -= value[:, :, h_start:h_end, w_start:w_end]
@@ -680,7 +680,7 @@ class StableDiffusionPanoramaPipeline(DiffusionPipeline, TextualInversionLoaderM
 
                 # take the MultiDiffusion step. Eq. 5 in MultiDiffusion paper: https://arxiv.org/abs/2302.08113
 #                 
-                if i < 10:    
+                if i < 35:    
                     latents = torch.where(count > 0, value / count, value)
                 else:
                     latents = torch.where(count > 0, value, value)
